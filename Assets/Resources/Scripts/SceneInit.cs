@@ -9,12 +9,12 @@ public class SceneInit : MonoBehaviour
     // Start is called before the first frame update
     public void ChangeScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
     public IEnumerator LoadSceneAfterDelay(string sceneName, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        SceneManager.LoadScene(sceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }
