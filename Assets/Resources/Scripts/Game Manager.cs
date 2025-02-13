@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void RoundOver()
+    public void RoundOver()
     {
         bool playerLost = playerScript.handValue > 21;
         bool dealerLost = dealerScript.handValue > 21;
