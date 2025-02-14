@@ -9,16 +9,23 @@ public class PlayerDealerScript : MonoBehaviour
 
     [SerializeField] CardScript cardScript;
     [SerializeField] DeckScript deckScript;
+    //index for a prefab to instantiate depending on the player
+    private int playerIndex = 0;
     //total value of cards in hand
     public int handValue = 0;
     //what we bet
-    private int candyWrappers = 1000;
+    private int units = 1000;
     //array of cards on the table
     public GameObject[] hand;
     // index of card to be turned over
     public int cardIndex = 0;
     // list to track aces
     List<CardScript> aceList = new List<CardScript>();
+
+    private void Awake()
+    {
+        deckScript = GameObject.FindGameObjectWithTag("Deck").gameObject.GetComponent<DeckScript>();
+    }
     public void StartHand()
     {
         GetCard();
@@ -65,12 +72,12 @@ public class PlayerDealerScript : MonoBehaviour
 
     public void AdjustMoney(int amount)
     {
-        candyWrappers += amount;
+        units += amount;
     }
 
-    public int GetCW()
+    public int GetUnits()
     {
-        return candyWrappers;
+        return units;
     }
 
     public void ResetHand()

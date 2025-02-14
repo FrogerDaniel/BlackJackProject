@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         hitBtn.onClick.AddListener(() => HitClicked());
         standBtn.onClick.AddListener(() => StandClicked());
         betBtn.onClick.AddListener(() => BetClicked());
-        exitBtn.onClick.AddListener(() => ExitClicked());
+        //exitBtn.onClick.AddListener(() => ExitClicked());
     }
 
     private void Update()
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         pot = 40;
         betsText.text = "Bets: " + pot.ToString() + " CW";
         playerScript.AdjustMoney(-20);
-        cashText.text = playerScript.GetCW().ToString() + " CW";
+        cashText.text = playerScript.GetUnits().ToString() + " CW";
     }
     private void HitClicked()
     {
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         else if (playerLost || (!dealerLost && dealerScript.handValue > playerScript.handValue))
         {
             mainText.text = "Dealer wins!";
-            if (playerScript.GetCW() == 0)
+            if (playerScript.GetUnits() == 0)
             {
                 Debug.Log("Should change scene");
                 StartCoroutine(sceneInit.LoadSceneAfterDelay("EndingScene", 2f)); 
@@ -168,19 +168,19 @@ public class GameManager : MonoBehaviour
             betBtn.gameObject.SetActive(false);
             dealerScoreText.gameObject.SetActive(true);
             hiddenCard.GetComponent<Renderer>().enabled = false;
-            cashText.text = playerScript.GetCW().ToString() + " CW";
+            cashText.text = playerScript.GetUnits().ToString() + " CW";
             standClicks = 0;
         }
     }
 
     private void BetClicked()
     {
-        if(playerScript.GetCW() > 0)
+        if(playerScript.GetUnits() > 0)
         {
             TMP_Text newBet = betBtn.GetComponentInChildren(typeof(TMP_Text)) as TMP_Text;
             int intBet = int.Parse(newBet.text.ToString().Remove(2, 2));
             playerScript.AdjustMoney(-intBet);
-            cashText.text = playerScript.GetCW().ToString() + " CW";
+            cashText.text = playerScript.GetUnits().ToString() + " CW";
             pot += (intBet * 2);
             betsText.text = "Bets: " + pot.ToString() + "CW";
         }
