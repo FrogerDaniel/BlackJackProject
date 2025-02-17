@@ -1,62 +1,83 @@
+using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class DeckScript : MonoBehaviour
+public class DeckScript : NetworkBehaviour
 {
-    public Sprite[] cardSprites;
-    int[] cardValues = new int[53];
-    int currentIndex = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public NetworkVariable<SpriteArrayWrapper> cardSprites = new NetworkVariable<SpriteArrayWrapper>(new SpriteArrayWrapper(new Sprite[] { }));
+    public NetworkVariable<IntArrayWrapper> cardValues = new NetworkVariable<IntArrayWrapper>(new IntArrayWrapper(new int[] { }));
+    private NetworkVariable<int> currentIndex = new NetworkVariable<int>(0, writePerm: NetworkVariableWritePermission.Server);
+
     void Start()
     {
         GetCardValues();
     }
- 
+
     void GetCardValues()
     {
         int num = 0;
-        //num to use in for loop
-        for (int i = 0; i < cardSprites.Length; i++)
+        int[] tempCardValues = new int[cardSprites.Value.Length()];
+        for (int i = 0; i < cardSprites.Value.Length(); i++)
         {
-            //assign value from a counter
             num = i;
-            //get the remainder from division
             num %= 13;
-            //check if a card is 10, or J,Q,K
-            if(num > 10 || num == 0)
+            if (num > 10 || num == 0)
             {
-                //if true assign them 10
                 num = 10;
             }
-            //add a value to the array
-            cardValues[i] = num++;
+            tempCardValues[i] = num++;
         }
+        cardValues.Value = new IntArrayWrapper(tempCardValues);
     }
-    public void Shuffle()
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ShuffleServerRpc()
     {
         // Standard array data swapping technique
-        for (int i = cardSprites.Length - 1; i > 0; --i)
-        {
-            int j = Mathf.FloorToInt(Random.Range(0.0f, 1.0f) * (cardSprites.Length - 1)) + 1;
-            Sprite face = cardSprites[i];
-            cardSprites[i] = cardSprites[j];
-            cardSprites[j] = face;
+        Sprite[] tempCardSprites = cardSprites.Value.GetSprites();
+        int[] tempCardValues = cardValues.Value.Values;
 
-            int value = cardValues[i];
-            cardValues[i] = cardValues[j];
-            cardValues[j] = value;
+        for (int i = tempCardSprites.Length - 1; i > 0; --i)
+        {
+            int j = Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 1.0f) * (tempCardSprites.Length - 1)) + 1;
+            Sprite face = tempCardSprites[i];
+            tempCardSprites[i] = tempCardSprites[j];
+            tempCardSprites[j] = face;
+
+            int value = tempCardValues[i];
+            tempCardValues[i] = tempCardValues[j];
+            tempCardValues[j] = value;
         }
-        currentIndex = 1;
+
+        cardSprites.Value =  new SpriteArrayWrapper(tempCardSprites);
+        cardValues.Value = new IntArrayWrapper(tempCardValues);
+        currentIndex.Value = 1;
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void DealCardServerRpc()
+    {
+        DealCardClientRpc();
+    }
+
+    [ClientRpc]
+    private void DealCardClientRpc()
+    {
+        CardScript cardScript = FindObjectOfType<CardScript>();
+        cardScript.SetSprite(cardSprites.Value.GetSprites()[currentIndex.Value]);
+        cardScript.SetValueOfCard(cardValues.Value[currentIndex.Value++]);
+    }
     public int DealCard(CardScript cardScript)
     {
-        cardScript.SetSprite(cardSprites[currentIndex]);
-        cardScript.SetValueOfCard(cardValues[currentIndex++]);
+        DealCardServerRpc();
         return cardScript.GetValueOfCard();
     }
-
     public Sprite GetCardBack()
     {
-        return cardSprites[0];
+        return cardSprites.Value.GetSprites()[0];
     }
 }
+
+
+

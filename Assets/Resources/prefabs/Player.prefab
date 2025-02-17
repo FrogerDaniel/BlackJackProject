@@ -309,8 +309,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 957328756725806351}
-  - component: {fileID: 6830996727833722205}
   - component: {fileID: 3820649331033892848}
+  - component: {fileID: 6830996727833722205}
   - component: {fileID: 502641251557999538}
   m_Layer: 0
   m_Name: Player
@@ -344,33 +344,6 @@ Transform:
   - {fileID: 1808426280009680252}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6830996727833722205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5075753544920419637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 812b319162e3d2f4eb076d92a37b3f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardScript: {fileID: 1252719949207098307}
-  deckScript: {fileID: 0}
-  handValue: 0
-  hand:
-  - {fileID: 5906365238770178066}
-  - {fileID: 5900634139112311020}
-  - {fileID: 7968420498873338670}
-  - {fileID: 9113297860961636944}
-  - {fileID: 4760871247725490891}
-  - {fileID: 7857724090903247304}
-  - {fileID: 634876522050061940}
-  - {fileID: 7442435027055441170}
-  - {fileID: 633028993205545870}
-  - {fileID: 7587296912760167337}
-  cardIndex: 0
 --- !u!114 &3820649331033892848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,6 +369,37 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &6830996727833722205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5075753544920419637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 812b319162e3d2f4eb076d92a37b3f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cardScript: {fileID: 1252719949207098307}
+  deckScript: {fileID: 0}
+  handValue:
+    m_InternalValue: 0
+  units:
+    m_InternalValue: 1000
+  hand:
+  - {fileID: 5906365238770178066}
+  - {fileID: 5900634139112311020}
+  - {fileID: 7968420498873338670}
+  - {fileID: 9113297860961636944}
+  - {fileID: 4760871247725490891}
+  - {fileID: 7857724090903247304}
+  - {fileID: 634876522050061940}
+  - {fileID: 7442435027055441170}
+  - {fileID: 633028993205545870}
+  - {fileID: 7587296912760167337}
+  cardIndex: 0
 --- !u!114 &502641251557999538
 MonoBehaviour:
   m_ObjectHideFlags: 0

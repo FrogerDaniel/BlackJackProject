@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1290196089850720155
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5245419420292276483
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5251097880864584189
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &6573629809651194660
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,6 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &6870391468088403162
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,9 +514,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1468498082802539744}
-  - component: {fileID: 5180451304941786290}
   - component: {fileID: 3183365462603468319}
   - component: {fileID: 2292763053259975261}
+  - component: {fileID: 5484884796940612939}
   m_Layer: 0
   m_Name: PlayerNew
   m_TagString: Player
@@ -544,33 +549,6 @@ Transform:
   - {fileID: 13766201416395923}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5180451304941786290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6870391468088403162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 812b319162e3d2f4eb076d92a37b3f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardScript: {fileID: 597488359621343788}
-  deckScript: {fileID: 0}
-  handValue: 0
-  hand:
-  - {fileID: 5251097880864584189}
-  - {fileID: 5245419420292276483}
-  - {fileID: 8628261844649812673}
-  - {fileID: 7444672601237224383}
-  - {fileID: 6573629809651194660}
-  - {fileID: 8368818658783318055}
-  - {fileID: 1290196089850720155}
-  - {fileID: 9106539507484826877}
-  - {fileID: 1288243712432521825}
-  - {fileID: 8098391323970449990}
-  cardIndex: 0
 --- !u!114 &3183365462603468319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,6 +610,28 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &5484884796940612939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6870391468088403162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2e9f587d458c249afebdcb10b105bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cardScript: {fileID: 597488359621343788}
+  deckScript: {fileID: 0}
+  handValue:
+    m_InternalValue: 0
+  units:
+    m_InternalValue: 1000
+  hand: []
+  cardIndex:
+    m_InternalValue: 0
 --- !u!1 &7444672601237224383
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,6 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8098391323970449990
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,6 +833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8368818658783318055
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,6 +934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8628261844649812673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,6 +1035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &9106539507484826877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,3 +1136,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

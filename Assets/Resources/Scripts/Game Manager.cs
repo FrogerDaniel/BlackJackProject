@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.Netcode;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     [SerializeField] Button dealBtn;
     [SerializeField] Button hitBtn;
@@ -16,8 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button exitBtn;
     private int standClicks = 0;
 
-    [SerializeField]PlayerDealerScript dealerScript;
-    [SerializeField]PlayerDealerScript playerScript;
+    [SerializeField]DealerScript dealerScript;
+    [SerializeField]PlayerScript playerScript;
     [SerializeField] SceneInit sceneInit;
 
     public TMP_Text scoreText;
@@ -44,10 +45,10 @@ public class GameManager : MonoBehaviour
         //exitBtn.onClick.AddListener(() => ExitClicked());
     }
 
-    private void Update()
-    {
-        PauseTheGame();
-    }
+    //private void Update()
+    //{
+    //    PauseTheGame();
+    //}
 
     private void DealClicked()
     {
@@ -56,11 +57,11 @@ public class GameManager : MonoBehaviour
         betBtn.gameObject.SetActive(true);
         mainText.gameObject.SetActive(false);
         dealerScoreText.gameObject.SetActive(false);
-        GameObject.Find("Deck").GetComponent<DeckScript>().Shuffle();
+        GameObject.Find("Deck").GetComponent<DeckScript>().ShuffleServerRpc();
         playerScript.StartHand();
         dealerScript.StartHand();
         //update player score
-        scoreText.text = "Hand: " +  playerScript.handValue.ToString();
+        scoreText.text = "Hand: " +  playerScript.handValue.Value.ToString();
         dealerScoreText.text = "Hand: " + dealerScript.handValue.ToString();
         hiddenCard.GetComponent<Renderer>().enabled = true;
         //hide buttons 
@@ -77,11 +78,11 @@ public class GameManager : MonoBehaviour
     private void HitClicked()
     {
         //check if there is still room for cards
-        if(playerScript.cardIndex <= 10)
+        if(playerScript.cardIndex.Value <= 10)
         {
             playerScript.GetCard();
             scoreText.text = "Hand: " + playerScript.handValue.ToString();
-            if(playerScript.handValue > 20)
+            if(playerScript.handValue.Value > 20)
             {
                 RoundOver();
             }
@@ -101,11 +102,11 @@ public class GameManager : MonoBehaviour
 
     private void HitDealer()
     {
-        while(dealerScript.handValue < 16 && dealerScript.cardIndex < 10)
+        while(dealerScript.handValue.Value < 16 && dealerScript.cardIndex.Value < 10)
         {
             dealerScript.GetCard();
             dealerScoreText.text = "Hand: " + dealerScript.handValue.ToString();
-            if(dealerScript.handValue > 20)
+            if(dealerScript.handValue.Value > 20)
             {
                 RoundOver();
             }
@@ -115,10 +116,10 @@ public class GameManager : MonoBehaviour
 
     public void RoundOver()
     {
-        bool playerLost = playerScript.handValue > 21;
-        bool dealerLost = dealerScript.handValue > 21;
-        bool playerHit21 = playerScript.handValue == 21;
-        bool dealerHit21 = dealerScript.handValue == 21;
+        bool playerLost = playerScript.handValue.Value > 21;
+        bool dealerLost = dealerScript.handValue.Value > 21;
+        bool playerHit21 = playerScript.handValue.Value == 21;
+        bool dealerHit21 = dealerScript.handValue.Value == 21;
         //if stand was clicked less than twice, no 21s or lost, quit function
         if(standClicks < 2 && !playerLost && !dealerLost && !playerHit21 && !dealerHit21)
         {
@@ -132,7 +133,7 @@ public class GameManager : MonoBehaviour
             playerScript.AdjustMoney(pot / 2);
         }
         //if player bust, or dealer has more ponts
-        else if (playerLost || (!dealerLost && dealerScript.handValue > playerScript.handValue))
+        else if (playerLost || (!dealerLost && dealerScript.handValue.Value > playerScript.handValue.Value))
         {
             mainText.text = "Dealer wins!";
             if (playerScript.GetUnits() == 0)
@@ -143,13 +144,13 @@ public class GameManager : MonoBehaviour
             }
         }
         //if player has more points, or dealer bust
-        else if (dealerLost || playerScript.handValue > dealerScript.handValue)
+        else if (dealerLost || playerScript.handValue.Value > dealerScript.handValue.Value)
         {
             mainText.text = "You got the wrappers!";
             playerScript.AdjustMoney(pot);
         }
         //check for tie, return bets
-        else if (playerScript.handValue == dealerScript.handValue)
+        else if (playerScript.handValue.Value == dealerScript.handValue.Value)
         {
             mainText.text = "Tie: Wrappers returned";
             playerScript.AdjustMoney(pot / 2);
@@ -193,28 +194,28 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void PauseTheGame()
-    {
+    //private void PauseTheGame()
+    //{
         
-        if (Input.GetKeyDown(KeyCode.Escape) && !gameIsPaused)
-        {
-            Debug.Log("Pause");
-            pauseCanvas.gameObject.SetActive(true);
-            mainUICanvas.gameObject.SetActive(false);
-            gameIsPaused = true;
-            Time.timeScale = 0;
-            exitBtn.gameObject.SetActive(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && gameIsPaused)
-        {
-            Debug.Log("Unpause");
-            pauseCanvas.gameObject.SetActive(false);
-            mainUICanvas.gameObject.SetActive(true);
-            gameIsPaused = false;
-            Time.timeScale = 1;
-            exitBtn.gameObject.SetActive(false);
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.Escape) && !gameIsPaused)
+    //    {
+    //        Debug.Log("Pause");
+    //        pauseCanvas.gameObject.SetActive(true);
+    //        mainUICanvas.gameObject.SetActive(false);
+    //        gameIsPaused = true;
+    //        Time.timeScale = 0;
+    //        exitBtn.gameObject.SetActive(true);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Escape) && gameIsPaused)
+    //    {
+    //        Debug.Log("Unpause");
+    //        pauseCanvas.gameObject.SetActive(false);
+    //        mainUICanvas.gameObject.SetActive(true);
+    //        gameIsPaused = false;
+    //        Time.timeScale = 1;
+    //        exitBtn.gameObject.SetActive(false);
+    //    }
+    //}
 
     private IEnumerator DeleteTextAfterDelay(TMP_Text text, float delay)
     {

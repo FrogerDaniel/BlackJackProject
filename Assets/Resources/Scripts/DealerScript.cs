@@ -1,124 +1,117 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using Unity.Netcode;
 using UnityEngine;
 
-public class DealerScript : MonoBehaviour
+public class DealerScript : NetworkBehaviour
 {
-    //script for both player and dealer
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
     [SerializeField] CardScript cardScript;
     [SerializeField] DeckScript deckScript;
-    [SerializeField] GameManager gameManager;
-    [SerializeField] GameObject hiddenCard;
-    //total value of cards in hand
-    public int handValue = 0;
-    //array of cards on the table
+
+    public NetworkVariable<int> handValue = new NetworkVariable<int>(0);
     public GameObject[] hand;
-    // index of card to be turned over
-    public int cardIndex = 0;
-    // list to track aces
-    List<CardScript> aceList = new List<CardScript>();
-    //var for pot of bets
-    public int pot = 0;
+    public NetworkVariable<int> cardIndex = new NetworkVariable<int>(0);
+    private List<CardScript> aceList = new List<CardScript>();
+
+    private void Awake()
+    {
+        deckScript = GameObject.FindGameObjectWithTag("Deck").gameObject.GetComponent<DeckScript>();
+    }
+
     public void StartHand()
+    {
+        if (IsServer)
+        {
+            StartHandServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void StartHandServerRpc()
     {
         GetCard();
         Debug.Log("Card Given");
         GetCard();
     }
 
-    //add a card to the hand
     public int GetCard()
     {
-        // Get a card, use deal card to assign sprite and value to card on table
-        int cardValue = deckScript.DealCard(hand[cardIndex].GetComponent<CardScript>());
-        // Show card on game screen
-        hand[cardIndex].GetComponent<Renderer>().enabled = true;
-        // Add card value to running total of the hand
-        handValue += cardValue;
-        // If value is 1, it is an ace
-        if (cardValue == 1)
-        {
-            aceList.Add(hand[cardIndex].GetComponent<CardScript>());
-        }
-        // Cehck if we should use an 11 instead of a 1
-        AceCheck();
-        cardIndex++;
-        return handValue;
+        GetCardServerRpc();
+        return handValue.Value;
     }
 
-    public void AceCheck()
+    [ServerRpc(RequireOwnership = false)]
+    private void GetCardServerRpc()
+    {
+        int cardValue = deckScript.DealCard(hand[cardIndex.Value].GetComponent<CardScript>());
+        hand[cardIndex.Value].GetComponent<Renderer>().enabled = true;
+        handValue.Value += cardValue;
+        if (cardValue == 1)
+        {
+            aceList.Add(hand[cardIndex.Value].GetComponent<CardScript>());
+        }
+        AceCheck();
+        cardIndex.Value++;
+        GetCardClientRpc(cardIndex.Value - 1, cardValue, handValue.Value);
+    }
+
+    [ClientRpc]
+    private void GetCardClientRpc(int index, int cardValue, int newHandValue)
+    {
+        hand[index].GetComponent<CardScript>().SetSprite(deckScript.cardSprites.Value.GetSprites()[index]);
+        hand[index].GetComponent<CardScript>().SetValueOfCard(cardValue);
+        hand[index].GetComponent<Renderer>().enabled = true;
+        handValue.Value = newHandValue;
+    }
+
+    private void AceCheck()
     {
         foreach (CardScript ace in aceList)
         {
-            //for each ace in the list of aces check if the total hand value would be less than bust value
-            if (handValue + 10 < 22 && ace.GetValueOfCard() == 1)
+            if (handValue.Value + 10 < 22 && ace.GetValueOfCard() == 1)
             {
-                //if player will not bust, make ace equal 11
                 ace.SetValueOfCard(11);
-                handValue += 10;
+                handValue.Value += 10;
             }
-            else if (handValue > 21 && ace.GetValueOfCard() == 11)
+            else if (handValue.Value > 21 && ace.GetValueOfCard() == 11)
             {
-                //if player will bust make ace equal 1
                 ace.SetValueOfCard(1);
-                handValue -= 10;
+                handValue.Value -= 10;
             }
         }
     }
-
     public void ResetHand()
     {
-        //goes through hand and resets card sprites
+        if (IsServer)
+        {
+            ResetHandServerRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ResetHandServerRpc()
+    {
         for (int i = 0; i < hand.Length; i++)
         {
             hand[i].GetComponent<CardScript>().ResetCard();
             hand[i].GetComponent<Renderer>().enabled = false;
         }
-        //resets all indexes and values to use for new hand
-        cardIndex = 0;
-        handValue = 0;
-        //recreate a list for aces
+        cardIndex.Value = 0;
+        handValue.Value = 0;
         aceList = new List<CardScript>();
+        ResetHandClientRpc();
     }
 
-    public void DealCards()
+    [ClientRpc]
+    private void ResetHandClientRpc()
     {
-        //deal cards to dealer
-        ResetHand();
-        //deal cards to players, implement function when player script is done
-        //implement enabling UI for players when player script is done
-        GameObject.Find("Deck").GetComponent<DeckScript>().Shuffle();
-        //start hand for player
-
-        //start hand for dealer
-        StartHand();
-        //update player and dealer score  score with UI Manager
-        //UpdateUI()
-
-        hiddenCard.GetComponent<Renderer>().enabled = true;
-        //hide deal button and enable hit and stand buttons for dealer and player via UI Manager
-        
-        //set standard pot size
-        pot = 40;
-        //update text with total bets via UI Manager
-        //player script will handle betting on the player side
-    }
-
-    private void HitDealer()
-    {
-        while (handValue < 16 && cardIndex < 10)
+        for (int i = 0; i < hand.Length; i++)
         {
-            GetCard();
-            //show dealer score
-            //dealerScoreText.text = "Hand: " + dealerScript.handValue.ToString();
-            if (handValue > 20)
-            {
-                //call for round over
-                gameManager.RoundOver();
-            }
+            hand[i].GetComponent<CardScript>().ResetCard();
+            hand[i].GetComponent<Renderer>().enabled = false;
         }
+        cardIndex.Value = 0;
+        handValue.Value = 0;
+        aceList = new List<CardScript>();
     }
 }

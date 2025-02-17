@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &882964433317086452
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,8 +110,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6574790567227992541}
-  - component: {fileID: 2532857532916267253}
   - component: {fileID: 431144346039784028}
+  - component: {fileID: 7123529292183011219}
   m_Layer: 0
   m_Name: Dealer
   m_TagString: Untagged
@@ -144,34 +145,6 @@ Transform:
   - {fileID: 6241155854719397481}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 91.414, z: 0}
---- !u!114 &2532857532916267253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882964433317086452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 812b319162e3d2f4eb076d92a37b3f76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardScript: {fileID: 8080125880188109248}
-  deckScript: {fileID: 0}
-  handValue: 0
-  hand:
-  - {fileID: 1083976913743920262}
-  - {fileID: 1490224433741478799}
-  - {fileID: 7639188492272091251}
-  - {fileID: 5906464421312583506}
-  - {fileID: 5699344402304153170}
-  - {fileID: 1376586680172669940}
-  - {fileID: 525152159198595214}
-  - {fileID: 1304293188193710503}
-  - {fileID: 1494502138495933228}
-  - {fileID: 1822725991942195910}
-  - {fileID: 8261368395010650685}
-  cardIndex: 0
 --- !u!114 &431144346039784028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +170,26 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &7123529292183011219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882964433317086452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d5eb75e55f96a43ad453c50a515e74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cardScript: {fileID: 8080125880188109248}
+  deckScript: {fileID: 0}
+  handValue:
+    m_InternalValue: 0
+  hand: []
+  cardIndex:
+    m_InternalValue: 0
 --- !u!1 &1083976913743920262
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1304293188193710503
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1376586680172669940
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1490224433741478799
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1494502138495933228
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,6 +694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &1822725991942195910
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,6 +795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5699344402304153170
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,6 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &5906464421312583506
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,6 +997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7639188492272091251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,6 +1098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &8261368395010650685
 GameObject:
   m_ObjectHideFlags: 0
@@ -1197,3 +1199,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2f554ba8f83e14e9e78f955b7c1729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
