@@ -1,33 +1,34 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 public class DealerScript : NetworkBehaviour
 {
-    [SerializeField] CardScript cardScript;
-    [SerializeField] DeckScript deckScript;
+    [SerializeField] private CardScript cardScript;
+    [SerializeField]private DeckScript deckDealerScript;
 
-    public NetworkVariable<int> handValue = new NetworkVariable<int>(0);
+    public NetworkVariable<int> handValueDealer = new NetworkVariable<int>(0, writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
     public GameObject[] hand;
-    public NetworkVariable<int> cardIndex = new NetworkVariable<int>(0);
+    public NetworkVariable<int> cardIndexDealer = new NetworkVariable<int>(0, writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
     private List<CardScript> aceList = new List<CardScript>();
 
     private void Awake()
     {
-        deckScript = GameObject.FindGameObjectWithTag("Deck").gameObject.GetComponent<DeckScript>();
+
+        deckDealerScript = GameObject.FindGameObjectWithTag("Deck Dealer").GetComponent<DeckScript>();
     }
 
     public void StartHand()
     {
         if (IsServer)
         {
-            StartHandServerRpc();
+            cardIndexDealer.Value = 1;
+            StartHandClientRpc();
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void StartHandServerRpc()
+    [ClientRpc]
+    private void StartHandClientRpc()
     {
         GetCard();
         Debug.Log("Card Given");
@@ -36,69 +37,70 @@ public class DealerScript : NetworkBehaviour
 
     public int GetCard()
     {
-        GetCardServerRpc();
-        return handValue.Value;
+        if (IsServer)
+        {
+            int cardValue = DealCardOnServer();
+            UpdateHandValueClientRpc(cardValue);
+        }
+        return handValueDealer.Value;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void GetCardServerRpc()
+    //[ServerRpc(RequireOwnership = false)]
+    //private void RequestCardServerRpc()
+    //{
+    //    int cardValue = DealCardOnServer();
+    //    UpdateHandValueClientRpc(cardValue);
+    //}
+
+    private int DealCardOnServer()
     {
-        int cardValue = deckScript.DealCard(hand[cardIndex.Value].GetComponent<CardScript>());
-        hand[cardIndex.Value].GetComponent<Renderer>().enabled = true;
-        handValue.Value += cardValue;
+        int cardValue = deckDealerScript.DealCard(hand[cardIndexDealer.Value].GetComponent<CardScript>());
+        hand[cardIndexDealer.Value].GetComponent<Renderer>().enabled = true;
+        //handValueDealer.Value += cardValue;
         if (cardValue == 1)
         {
-            aceList.Add(hand[cardIndex.Value].GetComponent<CardScript>());
+            aceList.Add(hand[cardIndexDealer.Value].GetComponent<CardScript>());
         }
         AceCheck();
-        cardIndex.Value++;
-        GetCardClientRpc(cardIndex.Value - 1, cardValue, handValue.Value);
+        UpdateCardClientRpc(cardIndexDealer.Value, cardValue);
+        cardIndexDealer.Value++;
+        Debug.Log("Card was given to dealer with value of " + cardValue);
+        return cardValue;
     }
 
     [ClientRpc]
-    private void GetCardClientRpc(int index, int cardValue, int newHandValue)
+    private void UpdateCardClientRpc(int index, int cardValue)
     {
-        hand[index].GetComponent<CardScript>().SetSprite(deckScript.cardSprites.Value.GetSprites()[index]);
+        hand[index].GetComponent<CardScript>().SetSprite(deckDealerScript.cardSprites.Value.GetSprites()[index]);
         hand[index].GetComponent<CardScript>().SetValueOfCard(cardValue);
         hand[index].GetComponent<Renderer>().enabled = true;
-        handValue.Value = newHandValue;
+    }
+
+    [ClientRpc]
+    private void UpdateHandValueClientRpc(int cardValue)
+    {
+        handValueDealer.Value += cardValue;
     }
 
     private void AceCheck()
     {
         foreach (CardScript ace in aceList)
         {
-            if (handValue.Value + 10 < 22 && ace.GetValueOfCard() == 1)
+            if (handValueDealer.Value + 10 < 22 && ace.GetValueOfCard() == 1)
             {
                 ace.SetValueOfCard(11);
-                handValue.Value += 10;
+                handValueDealer.Value += 10;
             }
-            else if (handValue.Value > 21 && ace.GetValueOfCard() == 11)
+            else if (handValueDealer.Value > 21 && ace.GetValueOfCard() == 11)
             {
                 ace.SetValueOfCard(1);
-                handValue.Value -= 10;
+                handValueDealer.Value -= 10;
             }
-        }
-    }
-    public void ResetHand()
-    {
-        if (IsServer)
-        {
-            ResetHandServerRpc();
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void ResetHandServerRpc()
+    public void ResetHand()
     {
-        for (int i = 0; i < hand.Length; i++)
-        {
-            hand[i].GetComponent<CardScript>().ResetCard();
-            hand[i].GetComponent<Renderer>().enabled = false;
-        }
-        cardIndex.Value = 0;
-        handValue.Value = 0;
-        aceList = new List<CardScript>();
         ResetHandClientRpc();
     }
 
@@ -110,8 +112,9 @@ public class DealerScript : NetworkBehaviour
             hand[i].GetComponent<CardScript>().ResetCard();
             hand[i].GetComponent<Renderer>().enabled = false;
         }
-        cardIndex.Value = 0;
-        handValue.Value = 0;
+        cardIndexDealer.Value = 0;
+        handValueDealer.Value = 0;
         aceList = new List<CardScript>();
     }
 }
+

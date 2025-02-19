@@ -1,17 +1,30 @@
+
 using System;
 using Unity.Netcode;
 using UnityEngine;
 
 public class DeckScript : NetworkBehaviour
 {
-    
-    public NetworkVariable<SpriteArrayWrapper> cardSprites = new NetworkVariable<SpriteArrayWrapper>(new SpriteArrayWrapper(new Sprite[] { }));
-    public NetworkVariable<IntArrayWrapper> cardValues = new NetworkVariable<IntArrayWrapper>(new IntArrayWrapper(new int[] { }));
-    private NetworkVariable<int> currentIndex = new NetworkVariable<int>(0, writePerm: NetworkVariableWritePermission.Server);
+    public NetworkVariable<SpriteArrayWrapper> cardSprites = new NetworkVariable<SpriteArrayWrapper>(new SpriteArrayWrapper(new Sprite[] { }), writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
+    public Sprite[] cardInitialSprites = new Sprite[53];
+    public NetworkVariable<IntArrayWrapper> cardValues = new NetworkVariable<IntArrayWrapper>(new IntArrayWrapper(new int[] { }), writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
+    public NetworkVariable<int> currentIndex = new NetworkVariable<int>(0, writePerm: NetworkVariableWritePermission.Server);
+    private bool deckIsShuffled = false;
+    private CardScript targetCardScript;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        GetCardValues();
+        base.OnNetworkSpawn();
+
+        if (NetworkManager.Singleton.ConnectedClientsList.Count == 1)
+        {
+            cardSprites.Value = new SpriteArrayWrapper(cardInitialSprites);
+            foreach (var spriteName in cardSprites.Value.SpriteNames)
+            {
+                Debug.Log("Assigned Sprite: " + spriteName);
+            }
+            GetCardValues();
+        }
     }
 
     void GetCardValues()
@@ -34,50 +47,56 @@ public class DeckScript : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void ShuffleServerRpc()
     {
-        // Standard array data swapping technique
-        Sprite[] tempCardSprites = cardSprites.Value.GetSprites();
-        int[] tempCardValues = cardValues.Value.Values;
-
-        for (int i = tempCardSprites.Length - 1; i > 0; --i)
+        if(!deckIsShuffled)
         {
-            int j = Mathf.FloorToInt(UnityEngine.Random.Range(0.0f, 1.0f) * (tempCardSprites.Length - 1)) + 1;
-            Sprite face = tempCardSprites[i];
-            tempCardSprites[i] = tempCardSprites[j];
-            tempCardSprites[j] = face;
+            Sprite[] tempCardSprites = cardSprites.Value.GetSprites();
+            int[] tempCardValues = cardValues.Value.Values;
 
-            int value = tempCardValues[i];
-            tempCardValues[i] = tempCardValues[j];
-            tempCardValues[j] = value;
+            for (int i = tempCardSprites.Length - 1; i > 0; --i)
+            {
+                int j = UnityEngine.Random.Range(0, i + 1);
+                Sprite face = tempCardSprites[i];
+                tempCardSprites[i] = tempCardSprites[j];
+                tempCardSprites[j] = face;
+
+                int value = tempCardValues[i];
+                tempCardValues[i] = tempCardValues[j];
+                tempCardValues[j] = value;
+            }
+
+            cardSprites.Value = new SpriteArrayWrapper(tempCardSprites);
+            cardValues.Value = new IntArrayWrapper(tempCardValues);
+            Debug.Log("Deck was shuffled");
+            deckIsShuffled = true;
+            currentIndex.Value = 1;
         }
 
-        cardSprites.Value =  new SpriteArrayWrapper(tempCardSprites);
-        cardValues.Value = new IntArrayWrapper(tempCardValues);
-        currentIndex.Value = 1;
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void DealCardServerRpc()
     {
         DealCardClientRpc();
+        currentIndex.Value++;
     }
 
     [ClientRpc]
     private void DealCardClientRpc()
     {
-        CardScript cardScript = FindObjectOfType<CardScript>();
-        cardScript.SetSprite(cardSprites.Value.GetSprites()[currentIndex.Value]);
-        cardScript.SetValueOfCard(cardValues.Value[currentIndex.Value++]);
+        targetCardScript.SetSprite(cardSprites.Value.GetSprites()[currentIndex.Value]);
+        targetCardScript.SetValueOfCard(cardValues.Value[currentIndex.Value]);
+        Debug.Log("currentCardIndex is " +  currentIndex.Value);    
     }
+
     public int DealCard(CardScript cardScript)
     {
+        targetCardScript = cardScript;
         DealCardServerRpc();
         return cardScript.GetValueOfCard();
     }
+
     public Sprite GetCardBack()
     {
         return cardSprites.Value.GetSprites()[0];
     }
 }
-
-
-

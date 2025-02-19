@@ -1,13 +1,10 @@
-using Mono.Cecil;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CardScript : NetworkBehaviour
 {
-    //store value of a card 
-    private NetworkVariable<int> value = new NetworkVariable<int>(0);
+    private NetworkVariable<int> value = new NetworkVariable<int>(0, readPerm: NetworkVariableReadPermission.Everyone);
+    private const string SpriteFolderPath = "Sprites/Cards Resized/";
 
     public int GetValueOfCard()
     {
@@ -16,38 +13,69 @@ public class CardScript : NetworkBehaviour
 
     public void SetValueOfCard(int newValue)
     {
-
-        SetValueServerRpc(newValue);
+        if (IsServer)
+        {
+            value.Value = newValue;
+            UpdateValueClientRpc(newValue);
+        }
+        else
+        {
+            SetValueServerRpc(newValue);
+        }
     }
+
     [ServerRpc(RequireOwnership = false)]
     private void SetValueServerRpc(int newValue)
     {
-        SetValueClientRpc(newValue);
+        value.Value = newValue;
+        UpdateValueClientRpc(newValue);
     }
+
     [ClientRpc]
-    private void SetValueClientRpc(int newValue)
+    private void UpdateValueClientRpc(int newValue)
     {
         value.Value = newValue;
     }
+
     public void SetSprite(Sprite newSprite)
     {
+        if (newSprite == null)
+        {
+            Debug.LogError("newSprite is null!");
+            return;
+        }
+
         SetSpriteClientRpc(newSprite.name);
     }
+
     [ClientRpc]
     private void SetSpriteClientRpc(string spriteName)
     {
-        Sprite newSprite = Resources.Load<Sprite>(spriteName);
-        gameObject.GetComponent<SpriteRenderer>().sprite = newSprite;
-    }
-    public string GetSpriteName()
-    {
-        return GetComponent<SpriteRenderer>().sprite.name;   
+        string fullPath = SpriteFolderPath + spriteName;
+        Sprite newSprite = Resources.Load<Sprite>(fullPath);
+        if (newSprite != null)
+        {
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = newSprite;
+            }
+            else
+            {
+                Debug.LogError("SpriteRenderer component is missing on " + gameObject.name);
+            }
+        }
+        else
+        {
+            Debug.LogError("Failed to load sprite: " + spriteName);
+        }
     }
 
     public void ResetCard()
     {
         ResetCardClientRpc();
     }
+
     [ClientRpc]
     private void ResetCardClientRpc()
     {

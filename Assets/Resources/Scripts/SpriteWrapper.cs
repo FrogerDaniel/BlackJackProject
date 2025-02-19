@@ -7,6 +7,7 @@ using UnityEngine;
 public class SpriteArrayWrapper : IEquatable<SpriteArrayWrapper>, INetworkSerializable
 {
     public string[] SpriteNames;  // Store the names of the sprites
+    private const string SpriteFolderPath = "Sprites/Cards Resized/";
 
     public SpriteArrayWrapper() { }
 
@@ -77,8 +78,14 @@ public class SpriteArrayWrapper : IEquatable<SpriteArrayWrapper>, INetworkSerial
         Sprite[] sprites = new Sprite[SpriteNames.Length];
         for (int i = 0; i < SpriteNames.Length; i++)
         {
-            sprites[i] = Resources.Load<Sprite>(SpriteNames[i]);
+            string fullPath = SpriteFolderPath + SpriteNames[i];
+            sprites[i] = Resources.Load<Sprite>(fullPath);
+            if (sprites[i] == null)
+            {
+                Debug.LogError("Failed to load sprite: " + SpriteNames[i] + " from path: " + fullPath);
+            }
         }
         return sprites;
     }
 }
+    
