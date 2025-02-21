@@ -118,10 +118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04ddfa64fa996646b9dcf7f36a41e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dealerPrefab: {fileID: 882964433317086452, guid: aa6cc3a747134c34db65c83e9028ab48, type: 3}
+  dealerPrefab: {fileID: 882964433317086452, guid: 439fa382aacd1f0488c5637005f630b1, type: 3}
   playerPrefab: {fileID: 6870391468088403162, guid: 47d08a28214eab640a0b9abcf97cc887, type: 3}
   gameManager: {fileID: 1033505741932279045, guid: c74190fa223fb814499ca16dcd77b00e, type: 3}
+  mainUi: {fileID: 8710556173403436078, guid: d2406fdd2322aa94890518b38e2a9d59, type: 3}
   deck: {fileID: 9124953666976034445, guid: 157b8e5f524bed1438057d043e29bf81, type: 3}
-  deckDealer: {fileID: 1615212709608097792, guid: e71679083fba8bf498d6483bd335aa93, type: 3}
-  hideCard: {fileID: 5424055499584408108, guid: 831cde0a97d56c54fa16ea4bb0ea81cd, type: 3}
-  mainUI: {fileID: 8710556173403436078, guid: d2406fdd2322aa94890518b38e2a9d59, type: 3}
+  deckDealer: {fileID: 3716478396892838124, guid: e71679083fba8bf498d6483bd335aa93, type: 3}

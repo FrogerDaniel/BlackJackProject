@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1615212709608097792
+--- !u!1 &3716478396892838124
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2356184256010768559}
-  - component: {fileID: 2438679434555576628}
-  - component: {fileID: 6913094708611578619}
-  - component: {fileID: 4311518855230604337}
+  - component: {fileID: 9176699981069093733}
+  - component: {fileID: 1937366357254963527}
+  - component: {fileID: 6741164148849044452}
+  - component: {fileID: 5553714651371311440}
   m_Layer: 0
   m_Name: Deck Dealer
   m_TagString: Deck Dealer
@@ -19,31 +19,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2356184256010768559
+--- !u!4 &9176699981069093733
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615212709608097792}
+  m_GameObject: {fileID: 3716478396892838124}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.15, y: 2.59, z: -2.27}
-  m_LocalScale: {x: 1.553246, y: 1.553246, z: 1.553246}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
---- !u!212 &2438679434555576628
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1937366357254963527
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615212709608097792}
+  m_GameObject: {fileID: 3716478396892838124}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -57,7 +57,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 82e8625451e89044ba7a003df1f0e62e, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -89,20 +89,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6913094708611578619
+--- !u!114 &6741164148849044452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615212709608097792}
+  m_GameObject: {fileID: 3716478396892838124}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2980849967
-  InScenePlacedSourceGlobalObjectIdHash: 590838353
+  GlobalObjectIdHash: 4033078827
+  InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -114,16 +114,16 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &4311518855230604337
+--- !u!114 &5553714651371311440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615212709608097792}
+  m_GameObject: {fileID: 3716478396892838124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4d9738e15cdbdb40b4ce1db168dc905, type: 3}
+  m_Script: {fileID: 11500000, guid: 32bf185547c82bb4aa50199f5c9485cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
@@ -184,6 +184,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 504826c6caf9acd468c3eecb07da0a94, type: 3}
   - {fileID: 21300000, guid: 1828d036ff8f7f1459093fb6e8da7274, type: 3}
   - {fileID: 21300000, guid: 8e20567f2c55df54aaee68b47695031f, type: 3}
+  hand:
+  - {fileID: 981845291468164120, guid: 5c9c86ecfe40aea46aa47b572699fa03, type: 3}
+  - {fileID: 981845291468164120, guid: 5c9c86ecfe40aea46aa47b572699fa03, type: 3}
+  - {fileID: 1307174452702866607, guid: 0f74cbf7764da3448976f65aac848bc2, type: 3}
+  - {fileID: 3801845562492890981, guid: 1569c5c2b83bd53428236cba151db7a3, type: 3}
+  - {fileID: 8866945627200695258, guid: 3988ef12a03d7254f8b922b9d55b5b2e, type: 3}
+  - {fileID: 292284075359458193, guid: 380ca5a9a8d0d9d43b2690fdfd1628af, type: 3}
+  - {fileID: 3444027267982789449, guid: c7ed32d820ed1334e9e99cc793bf2926, type: 3}
+  - {fileID: 6581451489580550529, guid: ce2b5e30646a82744840b7740c7fcb46, type: 3}
+  - {fileID: 3496859058800288941, guid: b7c275d704cdc8049a80265c1a63aaf0, type: 3}
+  - {fileID: 6202679702296255716, guid: 48672e6f0202c22438497cd7e8af0d1c, type: 3}
+  - {fileID: 652056344366203546, guid: 2d2db507dab6ad94ab14f22a3b3980f3, type: 3}
+  - {fileID: 1682965143251606454, guid: 45c84d4e6100756488ac21e7d4d5f1a8, type: 3}
   cardValues:
     m_InternalValue:
       Values: 
